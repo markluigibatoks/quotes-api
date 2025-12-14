@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuoteCollection;
 use App\Models\Quote;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class QuoteController extends Controller
      */
     public function index()
     {
-        return response()->json(Quote::all());
+        return new QuoteCollection(Quote::all());
     }
 
     /**

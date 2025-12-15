@@ -15,7 +15,7 @@ class QuoteResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-        $data['author'] = $this->author == 'Unknown' ? 'Test' : $this->author;
+        $data['author'] = $this->author ?? 'Unknown';
         
         return $data;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CardCollection;
+use App\Http\Resources\CardResource;
 use App\Models\Card;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,7 @@ class CardController extends Controller
      */
     public function index()
     {
-        //
+        return new CardCollection(Card::all());
     }
 
     /**
@@ -28,7 +30,7 @@ class CardController extends Controller
      */
     public function show(Card $card)
     {
-        //
+        return new CardResource($card);
     }
 
     /**

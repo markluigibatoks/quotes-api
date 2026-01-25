@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MatchingPairCollection;
 use App\Http\Resources\MatchingPairResource;
-use App\Models\Card;
-use App\Models\CardTemplate;
 use App\Models\MatchingPair;
+use App\Services\MatchingPair\GenerateCards;
 use Illuminate\Http\Request;
 
 class MatchingPairController extends Controller
@@ -24,6 +23,8 @@ class MatchingPairController extends Controller
      */
     public function store(Request $request)
     {
+        $generateCard = new GenerateCards();
+
         $validated = $request->validate([
             'name' => 'required|max:255',
             'difficulty' => 'required|integer'
@@ -31,37 +32,7 @@ class MatchingPairController extends Controller
 
         $matchingPair = MatchingPair::create($validated);
 
-        $cardTemplates = CardTemplate::inRandomOrder()->limit(6)->get();
-        
-        $cards = [];
-
-        foreach($cardTemplates as $template) {
-            $pairNumber = random_int(1000, 9999);
-
-            $cards[] = [
-                'pair_number' => $pairNumber,
-                'position' => 0,
-                'matching_pair_id' => $matchingPair->id,
-                'card_template_id' => $template->id    
-            ];
-
-            $cards[] = [
-                'pair_number' => $pairNumber,
-                'position' => 0,
-                'matching_pair_id' => $matchingPair->id,
-                'card_template_id' => $template->id    
-            ];
-        }
-
-        // Randomize positions 1–12
-        $positions = range(1, count($cards));
-        shuffle($positions);
-        
-        foreach($cards as $index => &$card) {
-            $card['position'] = $positions[$index];
-        }
-
-        Card::insert($cards);
+        $generateCard->handle($matchingPair->id, 6);
 
         return new MatchingPairResource($matchingPair);
     }
@@ -71,7 +42,7 @@ class MatchingPairController extends Controller
      */
     public function show(MatchingPair $matchingPair)
     {
-        return new MatchingPairResource($matchingPair->load('cards'));
+        return new MatchingPairResource($matchingPair);
     }
 
     /**

@@ -14,17 +14,14 @@ class GenerateCards
         $cards = [];
 
         foreach($cardTemplates as $template) {
-            $pairNumber = random_int(1000, 9999);
 
             $cards[] = [
-                'pair_number' => $pairNumber,
                 'position' => 0,
                 'matching_pair_id' => $matchingPairId,
                 'card_template_id' => $template->id    
             ];
 
             $cards[] = [
-                'pair_number' => $pairNumber,
                 'position' => 0,
                 'matching_pair_id' => $matchingPairId,
                 'card_template_id' => $template->id    

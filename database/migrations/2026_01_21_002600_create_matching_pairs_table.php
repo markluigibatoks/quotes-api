@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('matching_pairs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('game_over');
-            $table->smallInteger('mode');
+            $table->boolean('game_over')->default(false);
+            $table->unsignedTinyInteger('difficulty');
             $table->timestamps();
         });
     }

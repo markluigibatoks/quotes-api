@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call(MatchingPairSeeder::class);
+        $this->call(CardTemplateSeeder::class);
 
         User::factory()->create([
             'name' => 'Test User',

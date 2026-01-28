@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardTemplateController;
+use App\Http\Controllers\GameHistoryController;
 use App\Http\Controllers\MatchingPairController;
 use App\Http\Controllers\QuoteController;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ Route::apiResource('quotes', QuoteController::class)->only(['index', 'show']);
 Route::apiResource('cards', CardController::class)->only(['index', 'show']);
 Route::apiResource('card-templates', CardTemplateController::class)->only(['index', 'show']);
 Route::apiResource('matching-pairs', MatchingPairController::class);
+Route::apiResource('game-histories', GameHistoryController::class);
 
 
 // [

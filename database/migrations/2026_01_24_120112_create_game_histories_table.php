@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('matching_pair_id')->constrained('matching_pairs')->cascadeOnDelete();
             $table->foreignId('card_id')->constrained('cards');
-            $table->boolean('is_flipped')->default(false);
             $table->boolean('is_matched')->default(false);
+            $table->integer('matched_with')->nullable();
             $table->timestamps();
         });
     }

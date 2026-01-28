@@ -15,7 +15,9 @@ class MatchingPairController extends Controller
      */
     public function index()
     {
-        return new MatchingPairCollection(MatchingPair::with('cards')->get());
+        return new MatchingPairCollection(MatchingPair::with(['cards' => function ($query) {
+        $query->orderBy('position', 'asc'); // sort by position
+    }, 'cards.cardTemplate'])->get());
     }
 
     /**
@@ -42,7 +44,9 @@ class MatchingPairController extends Controller
      */
     public function show(MatchingPair $matchingPair)
     {
-        return new MatchingPairResource($matchingPair);
+        return new MatchingPairResource($matchingPair->load(['cards' => function ($query) {
+        $query->orderBy('position', 'asc'); // sort by position
+    }, 'cards.cardTemplate']));
     }
 
     /**

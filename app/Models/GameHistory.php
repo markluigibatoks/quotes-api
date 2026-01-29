@@ -20,4 +20,8 @@ class GameHistory extends Model
     public function matchingPair() {
         return $this->belongsTo(MatchingPair::class);
     }
+
+    public function card() {
+        return $this->belongsTo(Card::class);
+    }
 }

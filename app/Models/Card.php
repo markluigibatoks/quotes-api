@@ -19,4 +19,8 @@ class Card extends Model
     public function cardTemplate() {
         return $this->belongsTo(CardTemplate::class);
     }
+
+    public function gameHistories() {
+        return $this->hasMany(GameHistory::class);
+    }
 }

@@ -46,7 +46,7 @@ class GameHistoryController extends Controller
             ]);
         }
 
-        return new GameHistoryResource($currentFlip);
+        return new GameHistoryResource($currentFlip->load('card.cardTemplate'));
     }
 
     /**

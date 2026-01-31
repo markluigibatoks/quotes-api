@@ -13,9 +13,13 @@ class GameHistoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new GameHistoryCollection(GameHistory::all());
+        $validated = $request->validate([
+        'matching_pair_id' => ['required', 'integer'],
+    ]);
+
+        return new GameHistoryCollection(GameHistory::with('card.cardTemplate')->where('matching_pair_id', '=', $validated['matching_pair_id'])->get());
     }
 
     /**
@@ -30,23 +34,32 @@ class GameHistoryController extends Controller
         
         $previousFlip = GameHistory::where('matching_pair_id', $validated['matching_pair_id'])->where('is_matched', false)->whereNull('matched_with')->latest('created_at')->first();
 
-        $currentFlip = GameHistory::create($validated);
-
         if($previousFlip) {
-            $isMatch = Card::find($previousFlip->card_id)->card_template_id === Card::find($currentFlip->card_id)->card_template_id;
+            $previousCard = Card::findOrFail($previousFlip->card_id);
+            $currentCard = Card::findOrFail($validated['card_id']);
+
+            if($previousCard->position === $currentCard->position) {
+                abort(409, 'Same card cannot be flipped twice.');
+            }
+
+            $currentFlip = GameHistory::create($validated);
+
+            $isMatch = $previousCard->card_template_id === $currentCard->card_template_id;
 
             $previousFlip->update([
                 'is_matched' => $isMatch,
-                'matched_with' => $currentFlip->card_id
+                'matched_with' => $currentCard->id
             ]);
 
             $currentFlip->update([
                 'is_matched' => $isMatch,
-                'matched_with' => $previousFlip->card_id
+                'matched_with' => $previousCard->id
             ]);
+        } else {
+            $currentFlip = GameHistory::create($validated);
         }
 
-        return new GameHistoryResource($currentFlip->load('card.cardTemplate'));
+        return new GameHistoryCollection(GameHistory::with('card.cardTemplate')->where('matching_pair_id', '=', $validated['matching_pair_id'])->get());
     }
 
     /**
@@ -54,7 +67,7 @@ class GameHistoryController extends Controller
      */
     public function show(GameHistory $gameHistory)
     {
-        return new GameHistoryResource($gameHistory);
+        return new GameHistoryResource($gameHistory->load('card.cardTemplate'));
     }
 
     /**

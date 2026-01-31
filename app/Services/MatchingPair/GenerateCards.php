@@ -9,7 +9,7 @@ class GenerateCards
 {
     public function handle(int $matchingPairId, int $pairCount) {
 
-      $cardTemplates = CardTemplate::inRandomOrder()->limit($pairCount)->get();
+        $cardTemplates = CardTemplate::inRandomOrder()->limit($pairCount)->get();
         
         $cards = [];
 

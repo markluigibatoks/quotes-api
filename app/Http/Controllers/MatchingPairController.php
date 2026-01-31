@@ -29,12 +29,14 @@ class MatchingPairController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'difficulty' => 'required|integer'
+            'difficulty' => 'required|integer|in:1,2,3'
         ]);
 
         $matchingPair = MatchingPair::create($validated);
 
-        $generateCard->handle($matchingPair->id, 6);
+        $pairCount = $matchingPair->difficulty * 2 + 4;
+
+        $generateCard->handle($matchingPair->id, $pairCount);
 
         return new MatchingPairResource($matchingPair);
     }

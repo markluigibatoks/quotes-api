@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_histories', function (Blueprint $table) {
+        Schema::create('game_flip_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('matching_pair_id')->constrained('matching_pairs')->cascadeOnDelete();
             $table->foreignId('card_id')->constrained('cards');
-            $table->boolean('is_matched')->default(false);
             $table->integer('matched_with')->nullable();
             $table->timestamps();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_histories');
+        Schema::dropIfExists('game_flip_logs');
     }
 };

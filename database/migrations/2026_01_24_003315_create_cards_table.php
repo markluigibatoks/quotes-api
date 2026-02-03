@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->smallInteger('position');
+            $table->boolean('is_matched')->default(false);
             $table->foreignId('matching_pair_id')->constrained('matching_pairs')->cascadeOnDelete();
             $table->foreignId('card_template_id')->constrained('card_templates')->cascadeOnDelete();
             $table->timestamps();

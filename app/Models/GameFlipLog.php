@@ -4,17 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GameHistory extends Model
+class GameFlipLog extends Model
 {
     protected $fillable = [
         'card_id',
         'matching_pair_id',
-        'is_matched',
-        'matched_with'
-    ];
-
-    protected $casts = [
-        'is_matched' => 'boolean'
+        'matched_with',
     ];
 
     public function matchingPair() {

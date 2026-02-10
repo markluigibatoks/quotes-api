@@ -7,6 +7,8 @@ use App\Http\Resources\MatchingPairResource;
 use App\Models\MatchingPair;
 use App\Services\MatchingPair\GenerateCards;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedInclude;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MatchingPairController extends Controller
 {
@@ -15,9 +17,17 @@ class MatchingPairController extends Controller
      */
     public function index()
     {
-        return new MatchingPairCollection(MatchingPair::with(['cards' => function ($query) {
-        $query->orderBy('position', 'asc'); // sort by position
-    }, 'cards.cardTemplate'])->get());
+        $sessions = QueryBuilder::for(MatchingPair::class)
+            ->allowedIncludes(includes: [
+                AllowedInclude::callback('cards', function ($query) {
+                    return $query->orderBy('position');
+                })
+            ])
+            ->allowedFilters(['game_over', 'difficulty'])
+            ->allowedSorts(['id', 'name', 'game_over', 'difficulty'])
+            ->paginate();
+
+        return new MatchingPairCollection($sessions);
     }
 
     /**
